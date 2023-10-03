@@ -2,6 +2,7 @@ import flask
 import json
 import os
 import subprocess
+import redis
 from .client.gqrx import Client as GqrxClient
 
 print('*** BASEDIR ***')
@@ -10,6 +11,7 @@ print(os.environ['BASEDIR'])
 GQRX_HOST = '127.0.0.1'  # The server's hostname or IP address
 GQRX_PORT = 7356  # The port used by the server
 gqrx_client = GqrxClient(GQRX_HOST, GQRX_PORT)
+r = redis.Redis(host='localhost', port=6379, db=0)
 
 app = flask.Flask(__name__, instance_relative_config=True)
 
@@ -36,3 +38,20 @@ def gqrx_frequency():
 def pm_pm2_list():
     p = subprocess.run(['pm2', 'jlist'], capture_output=True)
     return p.stdout.decode()
+
+@app.route('/services/aprs/launch', methods=['POST'])
+def services_aprs_launch():
+    p = subprocess.run(['pm2', 'start', 'bin/_cyberdeck_launch_service_aprs_forwarder.sh'], cwd=os.environ['BASEDIR'])
+    return '{ "message": "ok" }'
+
+@app.route('/services/aprs/kill', methods=['POST'])
+def services_aprs_kill():
+    subprocess.run(['pm2', 'stop', '_cyberdeck_launch_service_aprs_forwarder'], cwd=os.environ['BASEDIR'])
+    subprocess.run(['pm2', 'delete', '_cyberdeck_launch_service_aprs_forwarder'], cwd=os.environ['BASEDIR'])
+    return '{ "message": "ok" }'
+
+@app.route('/services/aprs/message', methods=['POST'])
+def services_aprs_message():
+    r.publish('aprs', json.dumps(flask.request.get_json()))
+    return '{ "message": "ok" }'
+
