@@ -1,0 +1,35 @@
+#!/bin/bash
+
+spushd () {
+    command pushd "$@" > /dev/null
+}
+
+spopd () {
+    command popd "$@" > /dev/null
+}
+
+cleanup () {
+  pm2 -s stop _cyberdeck_launch_backend_controller
+  pm2 -s delete _cyberdeck_launch_backend_controller
+}
+
+SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+
+spushd $SCRIPT_DIR
+  source _cyberdeck_ini_parser.sh
+
+  spushd ..
+
+    process_ini_file 'env.conf'
+
+    BASEDIR=$(get_value 'main' 'basedir') \
+      pm2 -s start bin/_cyberdeck_launch_backend_controller.sh
+
+    sleep 1
+
+    ./bin/_cyberdeck_launch_frontend_console.sh
+
+  spopd
+spopd
+
+trap cleanup EXIT
