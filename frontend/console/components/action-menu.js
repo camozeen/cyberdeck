@@ -4,7 +4,7 @@ const pages = require('../pages');
 let initialized = false;
 let instance, selected;
 
-const getInstance = async (root) => {
+const getInstance = async (root, prompt) => {
   if (initialized) {
     return instance;
   }
@@ -41,6 +41,13 @@ const getInstance = async (root) => {
         bg: 'blue',
         bold: true
       }
+    },
+    search: (callback) => {
+      prompt.setFront();
+      prompt.input('Search:', '', function(err, value) {
+        if (err) return;
+        return callback(null, value);
+      });
     }
   });
   instance.setItems(Object.keys(pages.menuDisplay2Slug));

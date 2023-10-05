@@ -6,6 +6,7 @@ const screen = require('./components/screen');
 const loader = require('./components/loader');
 const actionContent = require('./components/action-content');
 const actionMenu = require('./components/action-menu');
+const searchPrompt = require('./components/search-prompt');
 
 const pages = require('./pages');
 
@@ -32,7 +33,8 @@ const delay = (ms) => {
 
   _loader.setContent('Fetching Available Action List');
   await delay(1000);
-  const _actionMenu = await actionMenu.getInstance(_screen);
+  const _searchPrompt = await searchPrompt.getInstance(_screen);
+  const _actionMenu = await actionMenu.getInstance(_screen, _searchPrompt);
   const _actionContent = await actionContent.getInstance(_screen);
 
   _loader.setContent('Loading Actions');
