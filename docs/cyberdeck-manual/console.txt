@@ -1,0 +1,32 @@
+{bold}About{/bold}
+
+Welcome to the cyberdeck. 
+
+{bold}{cyan-fg}Cyberdeck Manual{/cyan-fg}{/bold}
+
+This application. Includes instructions about how to run applications in the action menu to the left (use arrow keys and enter to run something).
+
+{bold}{cyan-fg}APRS - Notes{/cyan-fg}{/bold}
+
+Notes and additional details about APRS in general.
+
+{bold}{cyan-fg}APRS US from RTL-SDR{/cyan-fg}{/bold}
+
+Stream APRS messages from RTL-SDR dongle tuned to standard US channel 144.390 MHz.
+
+{bold}{cyan-fg}APRS US from UDP{/cyan-fg}{/bold}
+
+Stream APRS messages from a UDP connection
+
+{bold}{cyan-fg}APRS US from GRC{/cyan-fg}{/bold}
+
+Stream APRS messages from a gnuradio flowgraph
+
+{bold}{cyan-fg}PM2 Process List{/cyan-fg}{/bold}
+
+Get a list of running pm2 processes
+
+{bold}{cyan-fg}GQRX{/cyan-fg}{/bold}
+
+GQRX control panel
+

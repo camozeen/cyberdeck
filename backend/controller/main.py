@@ -3,6 +3,7 @@ import json
 import os
 import subprocess
 import redis
+import codecs
 from .client.gqrx import Client as GqrxClient
 
 print('*** BASEDIR ***')
@@ -18,6 +19,13 @@ app = flask.Flask(__name__, instance_relative_config=True)
 @app.route('/')
 def root():
     return json.dumps({ 'info': 'TODO' })
+
+@app.route('/docs/<slug>', methods=['GET'])
+def docs(slug):
+    content_path = os.path.join(os.environ['BASEDIR'], 'docs', slug, 'console.txt')
+    with codecs.open(content_path, 'r', 'utf-8') as f:
+        content = f.read();
+    return json.dumps({ 'doc': content })
 
 @app.route('/gqrx/connect', methods=['POST'])
 def gqrx_connect():

@@ -19,7 +19,7 @@ const getInstance = async (root) => {
   }
   instance = blessed.list({
     parent: root,
-    name: 'aprs-us-messages',
+    name: slug,
     label: ' {bold}{cyan-fg}Messages {/cyan-fg}{/bold} (Newest to Oldest) ',
     tags: true,
     draggable: false,

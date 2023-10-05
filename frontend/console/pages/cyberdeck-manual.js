@@ -1,4 +1,5 @@
 const blessed = require('blessed');
+const { docs } = require('../client/controller');
 
 let initialized = false;
 let instance;
@@ -11,25 +12,14 @@ const hoverDisplay = `
 Cyberdeck manual pages describing each module in this list
 `;
 
-const content = `
-Welcome
-
-If you contribute code to this project, you are implicitly allowing your code
-to be distributed under the MIT license. You are also implicitly verifying that
-all code is your original work.
-
-
-{bold}{cyan-fg}APRS Messages {/cyan-fg}{/bold}
-this is some other text
-`;
-
 const getInstance = async (root) => {
   if (initialized) {
     return instance;
   }
+  const content = await docs.docBySlug(slug);
   instance = blessed.box({
     parent: root,
-    name: 'cyberdeck-manual',
+    name: slug,
     hidden: true,
     tags: true,
     top: 0,
@@ -38,7 +28,7 @@ const getInstance = async (root) => {
     height: '100%',
     label: ' {bold}{cyan-fg}Cyberdeck {/cyan-fg}{/bold} (Info and Help) ',
     border: 'line',
-    content
+    content: content.doc
   })
   instance.on('click', () => {
     instance.focus();
