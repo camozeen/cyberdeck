@@ -11,7 +11,7 @@ module.exports.getInstance = async (root) => {
     parent: root,
     top: 0,
     right: 0,
-    width: '50%',
+    width: '70%',
     height: '100%',
     hidden: true,
   });

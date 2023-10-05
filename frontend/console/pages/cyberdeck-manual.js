@@ -7,6 +7,10 @@ const slug = 'cyberdeck-manual';
 
 const menuDisplay = 'Cyberdeck Manual';
 
+const hoverDisplay = `
+Cyberdeck manual pages describing each module in this list
+`;
+
 const content = `
 Welcome
 
@@ -36,6 +40,9 @@ const getInstance = async (root) => {
     border: 'line',
     content
   })
+  instance.on('click', () => {
+    instance.focus();
+  });
   initialized = true;
   return instance;
 };
@@ -55,6 +62,7 @@ const deactivate = async () => {
 module.exports = {
   slug,
   menuDisplay,
+  hoverDisplay,
   getInstance,
   activate,
   deactivate

@@ -5,9 +5,13 @@ const { service } = require('../client/controller');
 let initialized = false;
 let instance;
 
-const slug = 'aprs-us-message';
+const slug = 'aprs-us-rtlsdr-message';
 
-const menuDisplay = 'APRS US';
+const menuDisplay = 'APRS US from RTL-SDR';
+
+const hoverDisplay = `
+Stream APRS messages from RTL-SDR dongle tuned to standard US channel 144.390 MHz.
+`;
 
 const getInstance = async (root) => {
   if (initialized) {
@@ -18,7 +22,7 @@ const getInstance = async (root) => {
     name: 'aprs-us-messages',
     label: ' {bold}{cyan-fg}Messages {/cyan-fg}{/bold} (Newest to Oldest) ',
     tags: true,
-    draggable: true,
+    draggable: false,
     top: 0,
     right: 0,
     width: '100%',
@@ -48,6 +52,9 @@ const getInstance = async (root) => {
         bold: true
       }
     }
+  });
+  instance.on('click', () => {
+    instance.focus();
   });
   initialized = true;
   return instance;
@@ -88,6 +95,7 @@ const deactivate = async () => {
 module.exports = {
   slug,
   menuDisplay,
+  hoverDisplay,
   getInstance,
   activate,
   deactivate

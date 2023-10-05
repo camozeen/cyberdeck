@@ -12,10 +12,9 @@ const getInstance = async (root, prompt) => {
     parent: root,
     label: ' {bold}{cyan-fg}Actions {/cyan-fg}{/bold} (UP-DOWN) ',
     tags: true,
-    draggable: true,
     top: 0,
     left: 0,
-    width: '50%',
+    width: '30%',
     height: '100%',
     keys: true,
     vi: true,
@@ -50,12 +49,14 @@ const getInstance = async (root, prompt) => {
       });
     }
   });
+  instance.on('click', () => {
+    instance.focus();
+  });
   instance.setItems(Object.keys(pages.menuDisplay2Slug));
-  /*
-  instance.items[0].setHover('hover');
-  instance.items[1].setHover('APRS Messages');
-  instance.items[2].setHover('FM Radio');
-  */
+  instance.items.forEach(item => {
+    const text = item.getText();
+    item.setHover(pages.menuDisplay2HoverDisplay[text]);
+  });
   initialized = true;
   return instance;
 };
