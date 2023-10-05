@@ -54,7 +54,14 @@ const getInstance = async (root) => {
 
 const listener = (message, channel) => {
   if (initialized) {
-    instance.unshiftItem(`${message} - ${channel}`);
+    let parsed = { data: 'ERROR', ts: 0.0 };
+    try {
+      parsed = JSON.parse(message);
+    }
+    catch (e) {
+      // TODO
+    }
+    instance.unshiftItem(`${parsed.ts} - ${parsed.data}`);
     instance.enterSelected(0);
     instance.parent.render();
   }

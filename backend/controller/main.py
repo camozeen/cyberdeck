@@ -52,6 +52,22 @@ def services_aprs_kill():
 
 @app.route('/services/aprs/message', methods=['POST'])
 def services_aprs_message():
-    r.publish('aprs', json.dumps(flask.request.get_json()))
+    body = flask.request.get_json()
+    if body['data'].startswith('APRS'):
+        r.publish('aprs', json.dumps({
+            'data': body['data'].strip(),
+            'ts': body['ts']
+        }))
+    return '{ "message": "ok" }'
+
+@app.route('/services/gqrx/launch', methods=['POST'])
+def services_gqrx_launch():
+    p = subprocess.run(['pm2', 'start', 'bin/_cyberdeck_launch_service_gqrx.sh'], cwd=os.environ['BASEDIR'])
+    return '{ "message": "ok" }'
+
+@app.route('/services/gqrx/kill', methods=['POST'])
+def services_gqrx_kill():
+    subprocess.run(['pm2', 'stop', '_cyberdeck_launch_service_gqrx'], cwd=os.environ['BASEDIR'])
+    subprocess.run(['pm2', 'delete', '_cyberdeck_launch_service_gqrx'], cwd=os.environ['BASEDIR'])
     return '{ "message": "ok" }'
 
