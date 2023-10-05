@@ -23,11 +23,14 @@ spushd $SCRIPT_DIR
     process_ini_file 'env.conf'
 
     BASEDIR=$(get_value 'main' 'basedir') \
+    CONTROLLER_PORT=$(get_value 'controller' 'port') \
       pm2 -s start bin/_cyberdeck_launch_backend_controller.sh
 
     sleep 1
 
-    ./bin/_cyberdeck_launch_frontend_console.sh
+    CONTROLLER_PORT=$(get_value 'controller' 'port') \
+    CONTROLLER_HOST=$(get_value 'controller' 'host') \
+      ./bin/_cyberdeck_launch_frontend_console.sh
 
   spopd
 spopd

@@ -9,6 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "axios": "^1.5.1",
     "blessed": "^0.1.81",
     "redis": "^4.6.10"
   }

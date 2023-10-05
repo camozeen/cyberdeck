@@ -1,5 +1,6 @@
 const blessed = require('blessed');
 const redis = require('../client/redis');
+const { service } = require('../client/controller');
 
 let initialized = false;
 let instance;
@@ -71,6 +72,7 @@ const activate = async () => {
   if (initialized) {
     instance.show();
     await redis.getPubsub().subscribe('aprs', listener);
+    await service.aprsLaunch();
   }
 };
 
@@ -78,6 +80,7 @@ const deactivate = async () => {
   if (initialized) {
     instance.hide();
     await redis.getPubsub().unsubscribe('aprs', listener);
+    await service.aprsKill();
   }
 }
 
