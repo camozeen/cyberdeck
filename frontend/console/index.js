@@ -7,6 +7,7 @@ const loader = require('./components/loader');
 const actionContent = require('./components/action-content');
 const actionMenu = require('./components/action-menu');
 const searchPrompt = require('./components/search-prompt');
+const splash = require('./components/splash');
 
 const pages = require('./pages');
 
@@ -22,6 +23,10 @@ const delay = (ms) => {
 (async () => {
   const _screen = await screen.getInstance();
   const _loader = await loader.getInstance(_screen);
+  const _splash = await splash.getInstance(_screen);
+  splash.showSplash();
+  await delay(2000);
+  splash.hideSplash();
   _screen.render();
 
   _loader.load('Initializing');
