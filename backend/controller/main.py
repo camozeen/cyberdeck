@@ -42,6 +42,28 @@ def gqrx_frequency():
     else:
         return gqrx_client.get_frequency().toJson()
 
+@app.route('/gqrx/mode', methods=['GET', 'POST'])
+def gqrx_mode():
+    if flask.request.method == 'POST':
+        return gqrx_client.set_mode(flask.request.get_json()).toJson()
+    else:
+        return gqrx_client.get_mode().toJson()
+
+@app.route('/gqrx/dsp', methods=['GET', 'POST'])
+def gqrx_dsp():
+    if flask.request.method == 'POST':
+        return gqrx_client.set_dsp_state(flask.request.get_json()).toJson()
+    else:
+        return gqrx_client.get_dsp_state().toJson()
+
+@app.route('/gqrx/record/start', methods=['POST'])
+def gqrx_record_start():
+    return gqrx_client.start_recording().toJson()
+
+@app.route('/gqrx/record/stop', methods=['POST'])
+def gqrx_record_stop():
+    return gqrx_client.stop_recording().toJson()
+
 @app.route('/pm/pm2/list', methods=['GET'])
 def pm_pm2_list():
     p = subprocess.run(['pm2', 'jlist'], capture_output=True)
