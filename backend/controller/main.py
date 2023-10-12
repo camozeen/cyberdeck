@@ -101,3 +101,13 @@ def services_gqrx_kill():
     subprocess.run(['pm2', 'delete', '_cyberdeck_launch_service_gqrx'], cwd=os.environ['BASEDIR'])
     return '{ "message": "ok" }'
 
+@app.route('/services/gqrx/status', methods=['GET'])
+def services_gqrx_status():
+    p = subprocess.run(['pm2', 'jlist'], capture_output=True)
+    result = json.loads(p.stdout.decode())
+    status = { 'status': 'off' }
+    for r in result:
+        if r['name'] == '_cyberdeck_launch_service_gqrx':
+            status = { 'status': r['pm2_env']['status'] }
+    return json.dumps(status)
+

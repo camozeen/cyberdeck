@@ -41,9 +41,20 @@ const gqrxKill = async () => {
   }
 };
 
+const gqrxStatus = async () => {
+  const url = utils.makeUrl('/services/gqrx/status');
+  try {
+    const res = await axios.get(url);
+    return res.data;
+  } catch (e) {
+    utils.handleHttpError(e, url);
+  }
+};
+
 module.exports = {
   aprsLaunch,
   aprsKill,
   gqrxLaunch,
-  gqrxKill
+  gqrxKill,
+  gqrxStatus
 };
