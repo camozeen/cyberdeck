@@ -13,10 +13,6 @@ start_redis () {
 
   if [[ -z "$REDIS_STATUS" ]]; then
     sudo docker run --name cyberdeck-redis -p 6379:6379 -d redis > /dev/null 2>&1
-  else
-    # TODO: handle this better
-    echo "docker: redis container is already running"
-    exit 1
   fi
 }
 
@@ -32,7 +28,6 @@ stop_redis () {
 cleanup () {
   pm2 -s stop _cyberdeck_launch_backend_controller
   pm2 -s delete _cyberdeck_launch_backend_controller
-  stop_redis
 }
 
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
@@ -40,6 +35,11 @@ SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 if [[ "$1" == "check" ]]; then
   echo "performing system check"
   exit 0
+fi
+
+if [[ "$1" == "repair" ]]; then
+  echo "removing old redis instances"
+  stop_redis
 fi
 
 if [[ "$1" == "update" ]]; then
