@@ -73,6 +73,8 @@ spushd $SCRIPT_DIR
 
     BASEDIR=$(get_value 'main' 'basedir') \
     CONTROLLER_PORT=$(get_value 'controller' 'port') \
+    SATPREDICT_HOST=$(get_value 'satpredict' 'host') \
+    SATPREDICT_PORT=$(get_value 'satpredict' 'port') \
       pm2 -s start bin/_cyberdeck_launch_backend_controller.sh
 
     sleep 1

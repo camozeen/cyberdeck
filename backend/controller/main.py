@@ -112,6 +112,27 @@ def services_gqrx_status():
             status = { 'status': r['pm2_env']['status'] }
     return json.dumps(status)
 
+@app.route('/services/satpredict/launch', methods=['POST'])
+def services_satpredict_launch():
+    p = subprocess.run(['pm2', 'start', 'bin/_cyberdeck_launch_service_satpredict.sh'], cwd=os.environ['BASEDIR'])
+    return '{ "message": "ok" }'
+
+@app.route('/services/satpredict/kill', methods=['POST'])
+def services_satpredict_kill():
+    subprocess.run(['pm2', 'stop', '_cyberdeck_launch_service_satpredict'], cwd=os.environ['BASEDIR'])
+    subprocess.run(['pm2', 'delete', '_cyberdeck_launch_service_satpredict'], cwd=os.environ['BASEDIR'])
+    return '{ "message": "ok" }'
+
+@app.route('/services/satpredict/status', methods=['GET'])
+def services_satpredict_status():
+    p = subprocess.run(['pm2', 'jlist'], capture_output=True)
+    result = json.loads(p.stdout.decode())
+    status = { 'status': 'off' }
+    for r in result:
+        if r['name'] == '_cyberdeck_launch_service_satpredict':
+            status = { 'status': r['pm2_env']['status'] }
+    return json.dumps(status)
+
 @app.route('/satpredict/predictions', methods=['POST'])
 def satpredict_predictions():
     return satpredict(flask.request.get_json()).toJson()

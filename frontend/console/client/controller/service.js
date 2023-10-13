@@ -51,10 +51,43 @@ const gqrxStatus = async () => {
   }
 };
 
+const satpredictLaunch = async () => {
+  const url = utils.makeUrl('/services/satpredict/launch');
+  try {
+    const res = await axios.post(url, {});
+    return res.data;
+  } catch (e) {
+    utils.handleHttpError(e, url);
+  }
+};
+
+const satpredictKill = async () => {
+  const url = utils.makeUrl('/services/satpredict/kill');
+  try {
+    const res = await axios.post(url, {});
+    return res.data;
+  } catch (e) {
+    utils.handleHttpError(e, url);
+  }
+};
+
+const satpredictStatus = async () => {
+  const url = utils.makeUrl('/services/satpredict/status');
+  try {
+    const res = await axios.get(url);
+    return res.data;
+  } catch (e) {
+    utils.handleHttpError(e, url);
+  }
+};
+
 module.exports = {
   aprsLaunch,
   aprsKill,
   gqrxLaunch,
   gqrxKill,
-  gqrxStatus
+  gqrxStatus,
+  satpredictLaunch,
+  satpredictKill,
+  satpredictStatus
 };
