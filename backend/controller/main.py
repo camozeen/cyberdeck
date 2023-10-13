@@ -5,6 +5,7 @@ import subprocess
 import redis
 import codecs
 from .client.gqrx import Client as GqrxClient
+from .client.satpredict import get_aos as satpredict
 
 print('*** BASEDIR ***')
 print(os.environ['BASEDIR'])
@@ -111,3 +112,6 @@ def services_gqrx_status():
             status = { 'status': r['pm2_env']['status'] }
     return json.dumps(status)
 
+@app.route('/satpredict/predictions', methods=['POST'])
+def satpredict_predictions():
+    return satpredict(flask.request.get_json()).toJson()

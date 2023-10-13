@@ -1,10 +1,10 @@
-# TODO: add launcher in bin to run 'predict -s > /dev/null 2>&1'
-# TODO: refactor this file
-
 import socket
 import time
 from datetime import datetime
 import pandas as pd
+import os
+
+from ..mappers.satpredict.prediction import mapGetSatellitePredictionRequest, mapGetSatellitePredictionResponse
 
 def parsePredictions(sat_name, raw, now, downlink_hz):
     rows = ''.join(raw)
@@ -41,9 +41,13 @@ def parsePredictions(sat_name, raw, now, downlink_hz):
         })
     return result
     
-def get_aos(sat_name, now, downlink_hz=1000000, N_pass=5, aos_increment=5400):
-    print(f'START: fetching AOS data for {sat_name}')
-    server_address_port = ("127.0.0.1", 1210)
+def get_aos(rawRequest, N_pass=5, aos_increment=5400):
+    now = int(time.time())
+    request = mapGetSatellitePredictionRequest(rawRequest);
+    sat_name = request.name
+    downlink_hz = request.downlink_hz
+    print(f'INFO: fetching AOS data for {sat_name}')
+    server_address_port = (os.environ['SATPREDICT_HOST'], int(os.environ['SATPREDICT_PORT']))
     buffer_size = 64000
     eof = b'\x1a\n'
     df = None
@@ -87,12 +91,4 @@ def get_aos(sat_name, now, downlink_hz=1000000, N_pass=5, aos_increment=5400):
     if df is None or df['key'].nunique() != len(df):
         raise Exception('BAD PREDICTION')
 
-    return df
-
-
-now = int(time.time())
-df_noaa_19 = get_aos('NOAA-19', now, downlink_hz=137100000)
-df_noaa_18 = get_aos('NOAA-18', now, downlink_hz=137912500)
-df_iss = get_aos('ISS', now, downlink_hz=437800000)
-df = pd.concat([df_noaa_18, df_noaa_19, df_iss], ignore_index=True)
-df.to_csv(f'aos_{now}.csv', index=False)
+    return mapGetSatellitePredictionResponse(sat_name, now, downlink_hz, df.to_dict(orient='records'))
